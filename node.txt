@@ -1,0 +1,11 @@
+#To set the PATH environment variable in PowerShell, you can use the $env automatic variable as follows:
+
+$env:PATH += ";C:\node-v18.15.0-win-x64"
+
+#This will append the path C:\node-v18.15.0-win-x64 to the current PATH environment variable.
+
+#To remove this path from the PATH environment variable, you can use the following command:
+
+$env:PATH = $env:PATH -replace ";C:\\node-v18.15.0-win-x64", ""
+
+#This will remove the C:\node-v18.15.0-win-x64 path from the PATH environment variable.
