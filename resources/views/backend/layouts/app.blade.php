@@ -28,9 +28,10 @@
     <link rel="stylesheet" href="{{ asset('vendor/dist/css/adminlte.min.css') }}">
     {{-- <link rel="stylesheet" href="{{ asset('vendor/plugins/toastr/toastr.min.css') }}"> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
-
-
     {{-- <script src="{{ asset('vendor/plugins/toastr/toastr.min.js') }}"></script> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.0/dropzone.min.css">
+    <script src="{{ asset('vendor/plugins/lightslider/js/lightslider.js') }}"></script>
+
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed layout-navbar-fixed layout-footer-fixed">
@@ -120,6 +121,8 @@
 
     <script src="{{ asset('vendor/plugins/daterangepicker/daterangepicker.js') }}"></script>
 
+    <script src="https://cdn.tiny.cloud/1/mnja12hyd11j1hk6a02z0yda0h5mnude2esn2o39cl4u4x6n/tinymce/6/tinymce.min.js"
+        referrerpolicy="origin"></script>
     <!-- Page specific script -->
     <script>
         $(function() {

@@ -2,7 +2,23 @@
 
 @section('content')
     <div class="content-wrapper">
-        <div class="container py-5">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">My Wallets</h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item active" id="current-page"></li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+
+        <div class="container">
             <div class="row">
                 <div class="col-md-3">
                     <div class="card">
@@ -42,13 +58,15 @@
                             </h3>
                         </div>
                         <div class="card-body">
-                            @if ($wallet)
+                            @if (isset($wallet))
                                 <div class="d-flex justify-content-between align-items-center mb-4">
                                     <h4><i class="fas fa-coins mr-2"></i> Current Balance: RM{{ $wallet->balance }}</h4>
                                     <div>
-                                        <a href="{{ route('stripe.top-up') }}" class="btn btn-success mr-2"><i class="fas fa-arrow-up mr-1"></i>
+                                        <a href="{{ route('stripe.top-up') }}" class="btn btn-success mr-2"><i
+                                                class="fas fa-arrow-up mr-1"></i>
                                             Top Up</a>
-                                        <a href="{{ route('stripe.withdraw') }}" class="btn btn-danger"><i class="fas fa-arrow-down mr-1"></i>
+                                        <a href="{{ route('stripe.withdraw') }}" class="btn btn-danger"><i
+                                                class="fas fa-arrow-down mr-1"></i>
                                             Withdraw</a>
                                     </div>
                                 </div>
@@ -81,6 +99,10 @@
                                 </table>
                             @else
                                 <p>No wallet found for this user.</p>
+                                <p>Please top up to create a wallet.</p>
+                                <a href="{{ route('stripe.top-up') }}" class="btn btn-success"><i
+                                        class="fas fa-arrow-up mr-1"></i>
+                                    Top Up</a>
                             @endif
                         </div>
                     </div>

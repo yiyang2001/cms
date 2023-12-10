@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\backend\AnnouncementController;
 use App\Http\Controllers\backend\StripeController;
 use App\Http\Controllers\backend\WalletController;
 use App\Http\Controllers\TripController;
+use App\Models\Announcement;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -99,23 +101,24 @@ Route::post('/chat/send', [\App\Http\Controllers\backend\ChatController::class, 
 
 Route::middleware('auth')->group(function () {
     Route::resource('tripRequest', App\Http\Controllers\backend\TripRequestController::class);
+    Route::post('/vehicles/images/upload', [App\Http\Controllers\backend\VehicleController::class, 'uploadImage'])->name('vehicles.uploadImage');
+    Route::post('/vehicles/images/delete', [App\Http\Controllers\backend\VehicleController::class, 'deleteImage'])->name('vehicles.deleteImage');
+    Route::post('/vehicles/images/update', [App\Http\Controllers\backend\VehicleController::class, 'updateImage'])->name('vehicles.updateImage');
+    Route::get('/vehicles/list', [App\Http\Controllers\backend\VehicleController::class, 'list'])->name('vehicles.list');
+    Route::post('/vehicles/update_vehicle/{id}', [App\Http\Controllers\backend\VehicleController::class, 'update_vehicle'])->name('vehicles.update_vehicle');
+    Route::middleware('auth')->group(function () {
+        Route::resource('vehicles', App\Http\Controllers\backend\VehicleController::class);
+    });
 });
 
-Route::post('/vehicles/images/upload', [App\Http\Controllers\backend\VehicleController::class, 'uploadImage'])->name('vehicles.uploadImage');
-Route::post('/vehicles/images/delete', [App\Http\Controllers\backend\VehicleController::class, 'deleteImage'])->name('vehicles.deleteImage');
-Route::post('/vehicles/images/update', [App\Http\Controllers\backend\VehicleController::class, 'updateImage'])->name('vehicles.updateImage');
-Route::get('/vehicles/list', [App\Http\Controllers\backend\VehicleController::class, 'list'])->name('vehicles.list');
-Route::post('/vehicles/update_vehicle/{id}', [App\Http\Controllers\backend\VehicleController::class, 'update_vehicle'])->name('vehicles.update_vehicle');
 
-Route::middleware('auth')->group(function () {
-    Route::resource('vehicles', App\Http\Controllers\backend\VehicleController::class);
-});
+
 
 Route::get('image/upload', [App\Http\Controllers\backend\VehicleController::class, 'upload']);
 Route::post('image/upload/store', [App\Http\Controllers\backend\VehicleController::class, 'fileStore'])->name('image.upload.store');
 
 
-//Route for submitting the form datat
+//Route for submitting the form data
 Route::post('/storedata', [App\Http\Controllers\backend\VehicleController::class, 'storeData'])->name('form.data');
 //Route for submitting dropzone data
 Route::post('/storeimage', [App\Http\Controllers\backend\VehicleController::class, 'storeImage']);
@@ -138,5 +141,12 @@ Route::middleware('auth')->group(
         Route::get('/wallet/withdrawalRequest', [WalletController::class, 'withdrawalRequest'])->name('wallet.withdrawalRequest');
         ROute::post('/wallet/withdrawalRequest/approve/{id}', [WalletController::class, 'approveWithdrawalRequest'])->name('wallet.withdrawalRequest.approve');
         ROute::post('/wallet/withdrawalRequest/reject/{id}', [WalletController::class, 'rejectWithdrawalRequest'])->name('wallet.withdrawalRequest.reject');
+
+        Route::post('/announcements/storedata', [AnnouncementController::class, 'storeData'])->name('announcements.storeData');
+        Route::post('/announcements/image/upload', [AnnouncementController::class, 'storeImage']);
+        Route::post('/announcements/image/updateImage', [AnnouncementController::class, 'updateImage'])->name('announcements.edit.updateImage');
+        Route::post('/announcements/updateData/{id}', [AnnouncementController::class, 'updateData'])->name('announcements.updateData');
+        Route::post('/announcements/image/deleteImage', [AnnouncementController::class, 'deleteImage'])->name('announcements.deleteImage');
+        Route::resource('/announcements', AnnouncementController::class);
     }
 );

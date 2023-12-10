@@ -70,6 +70,36 @@
                         </li>
                     @endif
                 @endif
+                <li class="nav-item {{ request()->is('announcements*')? 'menu-open active' : '' }}">
+                    <a href="#" class="nav-link {{ request()->is('announcements*')? 'active' : '' }}">
+                        <i class="nav-icon fas fa-bullhorn"></i>
+                        <p>
+                            Announcements
+                            <i class="fas fa-angle-left right"></i>
+                            {{-- <span class="badge badge-info right">6</span> --}}
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        @if (isset(auth()->user()->role))
+                            @if (auth()->user()->role == 'Admin')
+                                <li class="nav-item">
+                                    <a href="{{ route('announcements.create') }}"
+                                        class="nav-link {{ request()->is('announcements/create') ? 'active' : '' }}">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Create Announcements</p>
+                                    </a>
+                                </li>
+                            @endif
+                        @endif
+                        <li class="nav-item">
+                            <a href="{{ route('announcements.index') }}"
+                                class="nav-link {{ request()->is('announcements') ? 'active' : '' }}">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>View Announcements</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a href="{{ route('my-profile') }}"
                         class="nav-link {{ request()->is('my-profile') ? 'active' : '' }}">

@@ -68,46 +68,46 @@ class VehicleController extends Controller
     }
 
     // Store a newly created vehicle in the database
-    public function store(Request $request)
-    {
-        $user = auth()->user();
-        // Validate the input data
-        $validatedData = $request->validate([
-            'vehicle_type' => 'nullable',
-            'brand' => 'nullable',
-            'model' => 'nullable',
-            'color' => 'nullable',
-            'number_plate' => 'nullable',
-            'available_seats' => 'nullable|integer',
-            // Add validation rules for other columns as needed
-        ]);
+    // public function store(Request $request)
+    // {
+    //     $user = auth()->user();
+    //     // Validate the input data
+    //     $validatedData = $request->validate([
+    //         'vehicle_type' => 'nullable',
+    //         'brand' => 'nullable',
+    //         'model' => 'nullable',
+    //         'color' => 'nullable',
+    //         'number_plate' => 'nullable',
+    //         'available_seats' => 'nullable|integer',
+    //         // Add validation rules for other columns as needed
+    //     ]);
 
-        $image = $request->file('file');
-        $imageName = $image->getClientOriginalName();
-        $image->move(public_path('images'), $imageName);
+    //     $image = $request->file('file');
+    //     $imageName = $image->getClientOriginalName();
+    //     $image->move(public_path('images'), $imageName);
 
-        $jsonData = [
-            'image' => $imageName,
-            'path' => public_path('images'),
-        ];
+    //     $jsonData = [
+    //         'image' => $imageName,
+    //         'path' => public_path('images'),
+    //     ];
 
 
-        // Create a new vehicle instance with the validated data
-        // $vehicle = Vehicle::create($validatedData);
-        $vehicle = new Vehicle();
-        $vehicle->user_id = $user->id;
-        $vehicle->vehicle_type = $validatedData['vehicle_type'];
-        $vehicle->brand = $validatedData['brand'];
-        $vehicle->model = $validatedData['model'];
-        $vehicle->color = $validatedData['color'];
-        $vehicle->number_plate = $validatedData['number_plate'];
-        $vehicle->available_seats = $validatedData['available_seats'];
-        $vehicle->images = $jsonData;
-        $vehicle->save();
+    //     // Create a new vehicle instance with the validated data
+    //     // $vehicle = Vehicle::create($validatedData);
+    //     $vehicle = new Vehicle();
+    //     $vehicle->user_id = $user->id;
+    //     $vehicle->vehicle_type = $validatedData['vehicle_type'];
+    //     $vehicle->brand = $validatedData['brand'];
+    //     $vehicle->model = $validatedData['model'];
+    //     $vehicle->color = $validatedData['color'];
+    //     $vehicle->number_plate = $validatedData['number_plate'];
+    //     $vehicle->available_seats = $validatedData['available_seats'];
+    //     $vehicle->images = $jsonData;
+    //     $vehicle->save();
 
-        // Redirect to the vehicle's detail page or any other desired action
-        return redirect()->route('vehicles.show', $vehicle->id);
-    }
+    //     // Redirect to the vehicle's detail page or any other desired action
+    //     return redirect()->route('vehicles.show', $vehicle->id);
+    // }
 
     public function storeData(Request $request)
     {
@@ -133,7 +133,7 @@ class VehicleController extends Controller
             $vehicle->available_seats = $validatedData['available_seats'];
             $vehicle->save();
 
-            return response()->json(['status' => "success", 'vehicle_id' => $vehicle->id, 'success' => 'Vehicle Added Successfully']);
+            return response()->json(['status' =>  "success", 'vehicle_id' => $vehicle->id, 'success' => 'Vehicle Added Successfully']);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()]);
         }
