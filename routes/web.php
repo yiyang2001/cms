@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\backend\StripeController;
+use App\Http\Controllers\backend\WalletController;
 use App\Http\Controllers\TripController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -115,20 +116,27 @@ Route::post('image/upload/store', [App\Http\Controllers\backend\VehicleControlle
 
 
 //Route for submitting the form datat
-Route::post('/storedata', [App\Http\Controllers\backend\VehicleController::class,'storeData'])->name('form.data');
+Route::post('/storedata', [App\Http\Controllers\backend\VehicleController::class, 'storeData'])->name('form.data');
 //Route for submitting dropzone data
-Route::post('/storeimage', [App\Http\Controllers\backend\VehicleController::class,'storeImage']);
+Route::post('/storeimage', [App\Http\Controllers\backend\VehicleController::class, 'storeImage']);
 
-Route::get('/stripe/top-up', [StripeController::class, 'showTopUpForm'])->name('stripe.top-up');
-Route::post('/stripe/top-up', [StripeController::class, 'handleTopUp'])->name('stripe.top-up.submit');
+Route::middleware('auth')->group(
+    function () {
+        Route::get('/wallet/top-up', [StripeController::class, 'showTopUpForm'])->name('stripe.top-up');
+        Route::post('/wallet/top-up', [StripeController::class, 'handleTopUp'])->name('stripe.top-up.submit');
+        Route::get('/wallet/top-up/success', [StripeController::class, 'handleTopUpSuccess'])->name('stripe.top-up.success');
+        Route::get('/wallet/top-up/cancel', [StripeController::class, 'handleTopUpCancel'])->name('stripe.top-up.cancel');
+        Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
 
-Route::get('/stripe/top-up/success', [StripeController::class, 'handlePaymentConfirmation'])->name('stripe.top-up.success');
-Route::get('/stripe/top-up/cancel', [StripeController::class, 'handlePaymentConfirmation'])->name('stripe.top-up.cancel');
+        Route::get('/wallet/withdraw', [StripeController::class, 'withdraw'])->name('stripe.withdraw');
+        Route::post('/wallet/withdraw', [StripeController::class, 'handleWithdrawal'])->name('stripe.withdraw.submit');
 
-// Routes for additional actions after payment confirmation
-Route::get('/stripe/success', [StripeController::class, 'paymentSuccess'])->name('stripe.success');
-Route::get('/stripe/error', [StripeController::class, 'paymentError'])->name('stripe.error');
-Route::get('/stripe/cancel', [StripeController::class, 'paymentCancel'])->name('stripe.cancel');
+        Route::get('/wallet', [WalletController::class, 'showWallet'])->name('wallet.show');
+        Route::get('/wallet/transfer', [WalletController::class, 'transfer'])->name('wallet.transfer');
+        Route::post('/wallet/transfer', [WalletController::class, 'handleTransfer'])->name('wallet.transfer.submit');
 
-
-Route::post('/stripe/create-checkout-session', [StripeController::class, 'createCheckoutSession'])->name('stripe.create-checkout-session');
+        Route::get('/wallet/withdrawalRequest', [WalletController::class, 'withdrawalRequest'])->name('wallet.withdrawalRequest');
+        ROute::post('/wallet/withdrawalRequest/approve/{id}', [WalletController::class, 'approveWithdrawalRequest'])->name('wallet.withdrawalRequest.approve');
+        ROute::post('/wallet/withdrawalRequest/reject/{id}', [WalletController::class, 'rejectWithdrawalRequest'])->name('wallet.withdrawalRequest.reject');
+    }
+);

@@ -12,6 +12,7 @@ use Bavix\Wallet\Interfaces\WalletFloat;
 use Bavix\Wallet\Traits\CanPay;
 use Bavix\Wallet\Traits\HasWallet;
 use Bavix\Wallet\Traits\HasWalletFloat;
+use Bavix\Wallet\Traits\HasWallets;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -27,6 +28,7 @@ class User extends Authenticatable implements Wallet, Customer, ProductInterface
         SoftDeletes,
         HasDatabaseNotifications,
         HasWallet,
+        HasWallets,
         CanPay,
         HasWalletFloat;
 

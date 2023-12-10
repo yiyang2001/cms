@@ -80,8 +80,8 @@
                     </a>
                 </li>
 
-                <li class="nav-item {{ request()->is('stripe/*') ? 'menu-open active' : '' }}">
-                    <a href="#" class="nav-link {{ request()->is('stripe/*') ? 'active' : '' }}">
+                <li class="nav-item {{ request()->is('wallet*') ? 'menu-open active' : '' }}">
+                    <a href="#" class="nav-link {{ request()->is('wallet*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-wallet"></i>
                         <p>
                             Wallet
@@ -90,12 +90,42 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{ route('stripe.top-up') }}"
-                                class="nav-link {{ request()->is('stripe/top-up') ? 'active' : '' }}">
+                            <a href="{{ route('wallet.show') }}"
+                                class="nav-link {{ request()->is('wallet') ? 'active' : '' }}">
                                 <i class="far fa-money-bill-alt nav-icon"></i>
+                                <p>My Wallets</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('stripe.top-up') }}"
+                                class="nav-link {{ request()->is('wallet/top-up') ? 'active' : '' }}">
+                                <i class="fas fa-arrow-up nav-icon"></i>
                                 <p>Top Up</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{ route('stripe.withdraw') }}"
+                                class="nav-link {{ request()->is('wallet/withdraw') ? 'active' : '' }}">
+                                <i class="fas fa-arrow-down nav-icon"></i>
+                                <p>Withdraw</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('wallet.transfer') }}"
+                                class="nav-link {{ request()->is('wallet/transfer') ? 'active' : '' }}">
+                                <i class="fas fa-exchange-alt nav-icon"></i>
+                                <p>Transfer</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('wallet.withdrawalRequest') }}"
+                                class="nav-link {{ request()->is('wallet/withdrawalRequest') ? 'active' : '' }}">
+                                <i class="fas fa-money-check-alt nav-icon"></i>
+                                <!-- Use appropriate Font Awesome class for "cash out" icon -->
+                                <p>Withdrawal Request</p>
+                            </a>
+                        </li>
+
                     </ul>
                 </li>
 

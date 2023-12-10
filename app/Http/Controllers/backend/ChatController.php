@@ -33,7 +33,8 @@ class ChatController extends Controller
             ->get();
 
         $receiverName = User::where('id', $user_id)->value('name');
-        return view('chat.chat_testing', ['messages' => $messages,  'user_id' => $user_id, 'receiverName' => $receiverName]);
+        $user = User::where('id', $user_id)->first();
+        return view('chat.chat_testing', ['messages' => $messages,'user_id' => $user_id, 'receiverName' => $receiverName, 'user' => $user]);
     }
 
 

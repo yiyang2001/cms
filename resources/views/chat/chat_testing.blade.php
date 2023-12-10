@@ -298,7 +298,8 @@
                                 </div>
                                 <input id="search-input" type="text" class="form-control" placeholder="Search...">
                             </div>
-                            <ul class="list-unstyled chat-list mt-2 mb-0" id="chatlist" style="height: 450px; overflow-y: scroll;">
+                            <ul class="list-unstyled chat-list mt-2 mb-0" id="chatlist"
+                                style="height: 450px; overflow-y: scroll;">
 
                             </ul>
                         </div>
@@ -310,9 +311,17 @@
                                             <img src="https://bootdey.com/img/Content/avatar/avatar2.png" alt="avatar">
                                         </a>
                                         <div class="chat-about">
-                                            <h6 class="m-b-0" id="user-name"> {{ $receiverName }}</h6>
-                                            {{-- <small>Last seen: 2 hours ago</small> --}}
+                                            <h6 class="m-b-0">
+                                                <a href="{{ route('user-profile', ['user_id' => $user_id]) }}"
+                                                    id="user-name">{{ $receiverName }}</a>
+                                            </h6>
                                         </div>
+                                    </div>
+                                    <div class="col-lg-6 text-right">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal"
+                                            data-target="#transferModal">
+                                            <i class="fas fa-money-bill-wave"></i> Transfer
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -343,6 +352,61 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="transferModal" tabindex="-1" role="dialog" aria-labelledby="transferModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h5 class="modal-title" id="transferModalLabel">Transfer Funds</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+
+                <!-- Modal Body -->
+                <div class="modal-body">
+                    <!-- Add your transfer form here -->
+                    <form id="transferForm" action="{{ route('wallet.transfer') }}" method="post">
+                        @csrf
+                        <!-- Transfer form fields -->
+                        <!-- Example: -->
+                        <div class="form-group">
+                            <label for="recipient">Recipient Email</label>
+                            <!-- Check exist of $user->email -->
+                            @if (isset($user->email))
+                                <input type="email" class="form-control" id="recipient" name="recipient"
+                                    value="{{ $user->email }}" required readonly>
+                            @endif
+                        </div>
+
+                        <div class="form-group">
+                            <label for="amount">Amount</label>
+                            <!-- Add a number input field -->
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">RM</span>
+                                </div>
+                                <!-- Add a number input field -->
+                                <input type="number" class="form-control" id="amount" name="amount" required>
+                            </div>
+                            <small>Your can transfer up to: RM {{ auth()->user()->wallet->balance }}</small>
+
+                        </div>
+                        @if (isset($user->id))
+                            <input type="hidden" name="recipient" id="recipient" value="{{ $user->id }}">
+                        @endif
+                </div>
+                <div class="modal-footer">
+                    <!-- Submit button for the transfer -->
+                    <button type="submit" class="btn btn-primary">Transfer</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+                </form>
             </div>
         </div>
     </div>
@@ -401,8 +465,8 @@
                 var avatarSrc = asset(avatarPath);
                 // var avatar = $('<img src="' + avatarSrc + '"alt="avatar">');
                 var avatar = $(
-                                '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'
-                            );
+                    '<img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="avatar">'
+                );
                 var messageContent = $('<div class="message"></div>').text(messageText);
 
                 if (receiverName === userDisplayName) {
@@ -540,7 +604,8 @@
                         }
 
                         var about = $('<div class="about"></div>');
-                        var name = $('<div class="name" id="user_name">' + message.user_name + '</div>');
+                        var name = $('<div class="name" id="user_name">' + message
+                            .user_name + '</div>');
                         var status = $('<div class="status">' + date + '</div>');
 
                         about.append(name);
@@ -565,5 +630,29 @@
         }
 
         fetchUserChat();
+
+        $('#transferForm').submit(function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Send form data using AJAX
+            $.ajax({
+                type: 'POST',
+                url: $(this).attr('action'),
+                data: $(this).serialize(), // Serialize form data
+                success: function(response) {
+                    toastr.success('Transfer successful!');
+                    // Refresh modal content on success
+                    $('#transferModal').modal('hide'); // Hide the modal
+                    $('#transferModal').on('hidden.bs.modal', function(e) {
+                        $(this).find('.modal-content').load(location.href +
+                            ' .modal-content');
+                    });
+                },
+                error: function(xhr, status, error) {
+                    // Handle error if necessary
+                    toastr.error('Transfer failed');
+                }
+            });
+        });
     });
 </script>
