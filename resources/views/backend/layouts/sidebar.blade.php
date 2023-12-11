@@ -208,7 +208,7 @@
                 </li> --}}
                 <li class="nav-item">
                     <a href="{{ route('contacts') }}"
-                        class="nav-link {{ request()->is('contacts') ? 'active' : '' }}">
+                        class="nav-link {{ request()->is('contacts*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-address-book"></i>
                         <p>
                             Contacts

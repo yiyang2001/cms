@@ -50,6 +50,13 @@
                                         </div>
                                     @endif
                                     <div class="row">
+                                        @if (count($users) == 0)
+                                            <div class="col-12">
+                                                <div class="alert alert-warning text-center">
+                                                    <strong>No User Found</strong>
+                                                </div>
+                                            </div>
+                                        @endif
                                         @foreach ($users as $user)
                                             <div class="col-12 col-sm-6 col-md-4 d-flex align-items-stretch flex-column">
                                                 <div class="card bg-light d-flex flex-fill">
