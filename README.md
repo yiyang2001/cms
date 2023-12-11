@@ -100,5 +100,5 @@ To verify if Composer is installed correctly:
 
 ## Usage
 
-1. Using admin@gmai.com as the admin user account to login , password is Abcd@1234
+1. Using admin@gmail.com as the admin user account to login , password is Abcd@1234
 
