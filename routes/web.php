@@ -122,6 +122,7 @@ Route::post('image/upload/store', [App\Http\Controllers\backend\VehicleControlle
 Route::post('/storedata', [App\Http\Controllers\backend\VehicleController::class, 'storeData'])->name('form.data');
 //Route for submitting dropzone data
 Route::post('/storeimage', [App\Http\Controllers\backend\VehicleController::class, 'storeImage']);
+Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
 
 Route::middleware('auth')->group(
     function () {
@@ -129,7 +130,6 @@ Route::middleware('auth')->group(
         Route::post('/wallet/top-up', [StripeController::class, 'handleTopUp'])->name('stripe.top-up.submit');
         Route::get('/wallet/top-up/success', [StripeController::class, 'handleTopUpSuccess'])->name('stripe.top-up.success');
         Route::get('/wallet/top-up/cancel', [StripeController::class, 'handleTopUpCancel'])->name('stripe.top-up.cancel');
-        Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
 
         Route::get('/wallet/withdraw', [StripeController::class, 'withdraw'])->name('stripe.withdraw');
         Route::post('/wallet/withdraw', [StripeController::class, 'handleWithdrawal'])->name('stripe.withdraw.submit');
