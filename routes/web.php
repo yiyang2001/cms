@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\backend\AnnouncementController;
+use App\Http\Controllers\backend\ChatController;
 use App\Http\Controllers\backend\StripeController;
 use App\Http\Controllers\backend\WalletController;
 use App\Http\Controllers\TripController;
@@ -148,5 +149,8 @@ Route::middleware('auth')->group(
         Route::post('/announcements/updateData/{id}', [AnnouncementController::class, 'updateData'])->name('announcements.updateData');
         Route::post('/announcements/image/deleteImage', [AnnouncementController::class, 'deleteImage'])->name('announcements.deleteImage');
         Route::resource('/announcements', AnnouncementController::class);
+
+        Route::get('/contacts', [ChatController::class, 'contacts'])->name('contacts');
+        Route::get('/contacts/search', [ChatController::class, 'search'])->name('contacts.search');
     }
 );

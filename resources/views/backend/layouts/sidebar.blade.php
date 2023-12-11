@@ -207,6 +207,15 @@
                     </ul>
                 </li> --}}
                 <li class="nav-item">
+                    <a href="{{ route('contacts') }}"
+                        class="nav-link {{ request()->is('contacts') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-address-book"></i>
+                        <p>
+                            Contacts
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('chat.chat', 0) }}"
                         class="nav-link {{ request()->is('chat*') ? 'active' : '' }}">
                         <i class="nav-icon fa fa-comment"></i>

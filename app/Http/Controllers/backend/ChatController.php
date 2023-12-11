@@ -34,7 +34,7 @@ class ChatController extends Controller
 
         $receiverName = User::where('id', $user_id)->value('name');
         $user = User::where('id', $user_id)->first();
-        return view('chat.chat_testing', ['messages' => $messages,'user_id' => $user_id, 'receiverName' => $receiverName, 'user' => $user]);
+        return view('chat.chat_testing', ['messages' => $messages, 'user_id' => $user_id, 'receiverName' => $receiverName, 'user' => $user]);
     }
 
 
@@ -115,12 +115,32 @@ class ChatController extends Controller
             })
             ->orderBy('m.created_at', 'desc')
             ->get();
-        
+
 
         // ->get();
         // Return a JSON response with the messages, sender name, and receiver name
         return response()->json([
             'messages' => $messages,
         ]);
+    }
+
+    public function contacts()
+    {
+        $users = User::paginate(6);
+
+        return view('chat.contacts', compact('users'));
+    }
+
+    public function search(Request $request)
+    {
+        $search = $request->input('search');
+
+        $users = User::where('name', 'LIKE', '%' . $search . '%')
+            ->orWhere('email', 'LIKE', '%' . $search . '%')
+            ->orWhere('location', 'LIKE', '%' . $search . '%')
+            ->orWhere('phone_no', 'LIKE', '%' . $search . '%')
+            ->paginate(6);
+
+        return view('chat.contacts', compact('users'));
     }
 }
