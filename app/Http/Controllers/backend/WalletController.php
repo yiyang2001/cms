@@ -124,6 +124,9 @@ class WalletController extends Controller
         $withdrawalRequest->status = 'rejected';
         $withdrawalRequest->save();
 
+        $user = User::find($withdrawalRequest->user_id);
+        $user->wallet->deposit($withdrawalRequest->amount);
+
         return response()->json(['message' => 'Request rejected successfully']);
     }
 
