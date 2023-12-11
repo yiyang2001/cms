@@ -37,7 +37,7 @@
 
 <body>
     <div class="jumbotron">
-        <h1>Welcome to JX Carpool</h1>
+        <h1>Welcome to TARUMT Carpool</h1>
         <p>Save money and reduce your carbon footprint by sharing rides with others</p>
         <a href="{{ route("register") }}" class="btn btn-primary">Join Now</a>
     </div>
