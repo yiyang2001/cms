@@ -70,8 +70,8 @@
                         </li>
                     @endif
                 @endif
-                <li class="nav-item {{ request()->is('announcements*')? 'menu-open active' : '' }}">
-                    <a href="#" class="nav-link {{ request()->is('announcements*')? 'active' : '' }}">
+                <li class="nav-item {{ request()->is('announcements*') ? 'menu-open active' : '' }}">
+                    <a href="#" class="nav-link {{ request()->is('announcements*') ? 'active' : '' }}">
                         <i class="nav-icon fas fa-bullhorn"></i>
                         <p>
                             Announcements
@@ -147,14 +147,18 @@
                                 <p>Transfer</p>
                             </a>
                         </li>
-                        <li class="nav-item">
-                            <a href="{{ route('wallet.withdrawalRequest') }}"
-                                class="nav-link {{ request()->is('wallet/withdrawalRequest') ? 'active' : '' }}">
-                                <i class="fas fa-money-check-alt nav-icon"></i>
-                                <!-- Use appropriate Font Awesome class for "cash out" icon -->
-                                <p>Withdrawal Request</p>
-                            </a>
-                        </li>
+                        @if (isset(auth()->user()->role))
+                            @if (auth()->user()->role == 'Admin')
+                                <li class="nav-item">
+                                    <a href="{{ route('wallet.withdrawalRequest') }}"
+                                        class="nav-link {{ request()->is('wallet/withdrawalRequest') ? 'active' : '' }}">
+                                        <i class="fas fa-money-check-alt nav-icon"></i>
+                                        <!-- Use appropriate Font Awesome class for "cash out" icon -->
+                                        <p>Withdrawal Request</p>
+                                    </a>
+                                </li>
+                            @endif
+                        @endif
 
                     </ul>
                 </li>
