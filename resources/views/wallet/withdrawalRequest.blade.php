@@ -142,8 +142,20 @@
 
     <script>
         $(document).ready(function() {
-            $('#withdrawalTable').DataTable();
-            $('#withdrawalTable2').DataTable();
+            $('#withdrawalTable').DataTable(
+                {
+                    "order": [
+                        [3, "desc"]
+                    ]
+                }
+            );
+            $('#withdrawalTable2').DataTable(
+                {
+                    "order": [
+                        [3, "desc"]
+                    ]
+                }
+            );
 
             $('.approve-request').click(function() {
                 const requestId = $(this).data('request-id');

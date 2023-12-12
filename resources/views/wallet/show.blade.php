@@ -78,6 +78,7 @@
                                         <tr>
                                             <th>Date</th>
                                             <th>Type</th>
+                                            <th>Description</th>
                                             <th>Amount</th>
                                             <!-- Add more columns if needed -->
                                         </tr>
@@ -85,9 +86,36 @@
                                     <tbody>
                                         @forelse($transactions as $transaction)
                                             <tr>
-                                                <td>{{ $transaction->created_at }}</td>
-                                                <td>{{ $transaction->type }}</td>
-                                                <td>{{ $transaction->amount }}</td>
+                                                <td class="text-muted" data-sort="{{ $transaction->created_at }}">
+                                                    {{ $transaction->created_at->format('d M y h:ia') }}
+                                                </td>
+                                                @if ($transaction->type == 'deposit')
+                                                    <td class="text-success">{{ ucfirst($transaction->type) }}</td>
+                                                @elseif($transaction->type == 'withdraw')
+                                                    <td class="text-danger">{{ ucfirst($transaction->type) }}</td>
+                                                @else
+                                                    <td>{{ $transaction->type }}</td>
+                                                @endif
+                                                @if (isset($transaction->meta))
+                                                    @if (isset($transaction->meta['meta']['to_id']))
+                                                        @if ($transaction->meta['meta']['to_id'] == auth()->user()->id)
+                                                            <td> Received from
+                                                                {{ $transaction->meta['meta']['from'] }}
+                                                            </td>
+                                                        @else
+                                                            <td>{{ $transaction->meta['meta']['description'] }}</td>
+                                                        @endif
+                                                    @endif
+                                                @else
+                                                    <td class="text-center">-</td>
+                                                @endif
+                                                @if ($transaction->amount < 0)
+                                                    <td class="text-danger">- RM
+                                                        {{ number_format(abs($transaction->amount), 2) }}</td>
+                                                @else
+                                                    <td class="text-primary">+ RM
+                                                        {{ number_format($transaction->amount, 2) }}</td>
+                                                @endif
                                                 <!-- Add more columns and transaction data as needed -->
                                             </tr>
                                         @empty
@@ -112,19 +140,15 @@
     </div>
     <script>
         $(document).ready(function() {
-
             $("#transactionTable").DataTable({
-                "responsive": true,
-                "lengthChange": true,
-                "autoWidth": true,
-                "buttons": ["copy", "excel", "pdf", "print", "colvis"],
-                "rowCallback": function(row, data) {
-                    // Check the status column for "pending"
-                    if (data.status == "pending") {
-                        $(row).addClass('pending-row');
-                    }
-                }
-            }).buttons().container().appendTo('#passengers-table_wrapper .col-md-6:eq(0)');
+                "columnDefs": [{
+                    "targets": 0, // Targets the first column
+                    "type": "date-eu" // Use "date-eu" type for correct date sorting
+                }],
+                "order": [
+                    [0, "desc"]
+                ]
+            });
         });
 
         $(document).ready(function() {

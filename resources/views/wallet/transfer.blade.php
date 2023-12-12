@@ -88,9 +88,9 @@
                                             <td>{{ $transfer->email }}</td>
                                             <td>{{ $transfer->amount }}</td>
                                             <td>
-                                                <span class="badge badge-success">{{ ucfirst($transfer->status) }}</span>
+                                                <span class="badge badge-success">{{ ucfirst($transfer->transfer_status) }}</span>
                                             </td>
-                                            <td>{{ $transfer->created_at }}</td>
+                                            <td>{{ $transfer->transfer_created_at }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -103,7 +103,11 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#transferTable').DataTable();
+            $('#transferTable').DataTable(
+                {
+                    "order": [[ 3, "desc" ]]
+                }
+            );
 
             $('#recipient').select2({
                 placeholder: 'Select User Email',

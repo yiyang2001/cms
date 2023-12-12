@@ -53,7 +53,7 @@ class WalletController extends Controller
         $wallet = $user->wallet; // Assuming the relationship exists between User and Wallet models
 
         // Fetch transaction history for the selected wallet
-        $transactions = $selectedWallet ? $selectedWallet->transactions()->latest()->paginate(10) : collect();
+        $transactions = $selectedWallet ? $selectedWallet->transactions()->orderby('created_at','desc')->get() : [];
 
         return view('wallet.show', compact('userWallets', 'selectedWallet', 'transactions'));
     }
@@ -64,7 +64,8 @@ class WalletController extends Controller
         $user = auth()->user();
         $wallet = $user->wallet;
 
-        $transferHistory = Transfer::where('from_id', $wallet->id)
+        $transferHistory = Transfer::select('transfers.*', 'transactions.*', 'users.*','transfers.status as transfer_status','transfers.created_at as transfer_created_at')
+            ->where('from_id', $wallet->id)
             ->join('transactions', 'transactions.id', '=', 'transfers.deposit_id')
             ->join('users', 'users.id', '=', 'transactions.payable_id')
             ->get();
@@ -90,7 +91,21 @@ class WalletController extends Controller
         $amount = (float) $request->input('amount');
 
         try {
-            $user->transfer($recipient, $amount); // Transfer funds to recipient
+            $user->transfer($recipient, $amount,[
+                'meta' => [
+                    'type' => 'transfer', 
+                    'status' => 'success',
+                    'description' => 'Transfer to ' . $recipient->email,
+                    'recipient_description' => 'Received from ' . $user->email,
+                    'from' => $user->email,
+                    'from_id' => $user->id,
+                    'from_name' => $user->name,
+                    'to' => $recipient->email,
+                    'to_id' => $recipient->id,
+                    'to_name' => $recipient->name,
+                    'notes' => '',
+                ]
+            ]); 
 
             if ($request->ajax()) {
                 return response()->json(['success' => 'Transfer successful.'], 200);
@@ -129,8 +144,16 @@ class WalletController extends Controller
         $withdrawalRequest->save();
 
         $user = User::find($withdrawalRequest->user_id);
-        $user->wallet->deposit($withdrawalRequest->amount);
-        
+        $user->wallet->deposit($withdrawalRequest->amount, [
+            'meta' => [
+                'type' => 'withdrawal_request', 
+                'withdrawal_request_id' => $withdrawalRequest->id,
+                'status' => 'rejected',
+                'description' => 'Withdrawal request rejected',
+                'notes' => '',
+            ]
+        ]);
+
 
         return response()->json(['message' => 'Request rejected successfully']);
     }

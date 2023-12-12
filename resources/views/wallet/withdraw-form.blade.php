@@ -89,6 +89,9 @@
     <script>
         $(document).ready(function() {
             $('#transactionTable').DataTable(
+                {
+                    "order": [[ 2, "desc" ]]
+                }
             );
         });
     </script>

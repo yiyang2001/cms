@@ -117,7 +117,7 @@
                         </div>
                         <div class="card-body">
                             <!-- Display top-up history as a table -->
-                            <table class="table">
+                            <table class="table table-striped" id="topUpHistoryTable">
                                 <thead>
                                     <tr>
                                         <th>Date</th>
@@ -151,6 +151,13 @@
                 $(this).addClass('active');
                 // Check the respective radio button
                 $(this).find('input[type="radio"]').prop('checked', true);
+            });
+
+            $('#topUpHistoryTable').DataTable({
+                "order": [
+                    [0, "desc"]
+                ],
+                "searching": false ,
             });
         });
 

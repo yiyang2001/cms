@@ -54,7 +54,13 @@ class StripeController extends Controller
             // Update the user's wallet or account balance
             $user = User::find($userId);
             if ($user) {
-                $user->deposit($amount); // Assuming 'deposit' method updates the user's wallet
+                $user->deposit($amount, [
+                    'meta' => [
+                        'type' => 'top_up',
+                        'description' => 'Wallet top-up Successful',
+                        'notes' => 'Stripe payment intent ID: ' . $paymentIntent->id,
+                    ]
+                ]);
             }
 
             Log::info($userId . ' wallet updated by ' . $amount . ' dollars');
@@ -119,45 +125,16 @@ class StripeController extends Controller
         return redirect()->route('stripe.top-up')->with('error', 'Payment cancelled.');
     }
 
-
-    public function handlePaymentConfirmation(Request $request)
-    {
-        // Retrieve payment information from the query parameters
-        $user = Auth::user();
-        $success = $request->query('success');
-        $paymentIntentId = $request->query('payment_intent');
-        $amount = $request->query('amount');
-
-        if ($success) {
-            try {
-                Stripe::setApiKey(env('STRIPE_SECRET'));
-
-                $payment = PaymentIntent::retrieve($paymentIntentId);
-
-                if ($payment->status === 'succeeded') {
-                    $amount = $amount / 100; // Convert amount from cents to dollars (or relevant currency)
-                    // Update the user's wallet balance after successful top-up
-                    $user->deposit($amount);
-                    // Perform any other necessary actions upon successful payment
-                    return redirect()->route('payment.success');
-                }
-            } catch (\Exception $e) {
-                return redirect()->route('payment.error')->with('error', $e->getMessage());
-            }
-        } else {
-            // Handle payment cancellation or failure
-            return redirect()->route('payment.cancel');
-        }
-    }
-
     public function withdraw()
     {
         $user = Auth::user();
         $walletBalance = $user->balance;
         $wallet = $user->wallet;
         $withdrawalRequests = WithdrawalRequest::where('user_id', $user->id)->get();
-        return view('wallet.withdraw-form', ['walletBalance' => $walletBalance, 
-        'wallet' => $wallet, 'withdrawalRequests' => $withdrawalRequests]);
+        return view('wallet.withdraw-form', [
+            'walletBalance' => $walletBalance,
+            'wallet' => $wallet, 'withdrawalRequests' => $withdrawalRequests
+        ]);
     }
 
     public function handleWithdrawal(Request $request)
@@ -186,7 +163,16 @@ class StripeController extends Controller
         ]);
 
         // Update the wallet balance (subtract the withdrawal amount)
-        $user->withdraw($withdrawalAmount);
+        $transaction = $user->withdraw($withdrawalAmount, [
+            'meta' => [
+                'type' => 'withdrawal_request', // Set the meta type as withdrawal_request
+                'status' => 'pending',
+                'description' => 'Withdrawal request submitted',
+                'notes' => '',
+            ]
+        ]);
+
+        dd($transaction->meta['type']);
 
         return back()->with('success', 'Withdrawal request submitted successfully.');
     }
