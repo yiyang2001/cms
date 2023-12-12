@@ -70,6 +70,8 @@
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Role</th>
+                                                <th>Created At</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
@@ -80,11 +82,19 @@
                                                     <td>{{ $user->name }}</td>
                                                     <td>{{ $user->email }}</td>
                                                     <td>{{ $user->role }}</td>
+                                                    <td>{{ $user->created_at }}</td>
+                                                    <td>
+                                                        @if ($user->status == "Active")
+                                                            <span class="badge badge-success">Active</span>
+                                                        @else
+                                                            <span class="badge badge-danger">Blacklist</span>
+                                                        @endif
+                                                    </td>
                                                     <td>
                                                         <a href="{{ route('edit-users', $user->id) }}"
                                                             class="btn btn-primary">Edit</a>
-                                                        <a href="{{ route('delete-users', $user->id) }}"
-                                                            class="btn btn-danger">Delete</a>
+                                                        {{-- <a href="{{ route('delete-users', $user->id) }}"
+                                                            class="btn btn-danger">Delete</a> --}}
                                                     </td>
                                                 </tr>
                                             @endforeach
@@ -95,6 +105,8 @@
                                                 <th>Name</th>
                                                 <th>Email</th>
                                                 <th>Role</th>
+                                                <th>Created At</th>
+                                                <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </tfoot>

@@ -35,7 +35,11 @@
                     <div class="col-md-8">
                         <div class="card">
                             <div class="card-header">
-                                <h3 class="card-title">{{ $announcement->title }}</h3>
+                                <h3 class="card-title mb-0" style="font-size: 25px;"><strong>{{ $announcement->title }}</strong></h3>
+                                <br>
+                                <div>
+                                    <p class="text-muted mt-2 mb-0">Announced At: {{ $announcement->created_at->format('d M Y h:ia') }}</p>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <p>{!! $announcement->content !!}</p>

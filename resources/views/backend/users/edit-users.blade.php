@@ -6,7 +6,7 @@
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">Data Table</h1>
+                        <h1 class="m-0">User Manangement</h1>
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
@@ -54,10 +54,10 @@
                                         </div>
                                     @endif
                                     @if (session('error'))
-                                    {{-- <strong>Whoops! There is something wrong with your input </strong> --}}
-                                    <div class="alert alert-danger">
-                                        <strong>{{session('error')}}</strong>
-                                    </div>
+                                        {{-- <strong>Whoops! There is something wrong with your input </strong> --}}
+                                        <div class="alert alert-danger">
+                                            <strong>{{ session('error') }}</strong>
+                                        </div>
                                     @endif
                                     <form method="POST" action="{{ route('update-users', $edit->id) }}">
                                         @csrf
@@ -65,24 +65,24 @@
                                             <label for="name" class="col-sm-2 col-form-label">Name</label>
                                             <div class="col-sm-10">
                                                 <input type="text" name="name" class="form-control"
-                                                    placeholder="Enter your name" value="{{ $edit->name}}">
+                                                    placeholder="Enter your name" value="{{ $edit->name }}">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="email" class="col-sm-2 col-form-label">Email</label>
                                             <div class="col-sm-10">
                                                 <input type="email" name="email" class="form-control"
-                                                    placeholder="Enter email" value="{{ $edit->email}}">
+                                                    placeholder="Enter email" value="{{ $edit->email }}">
                                             </div>
                                         </div>
                                         <div class="form-group row">
                                             <label for="password" class="col-sm-2 col-form-label">Password</label>
                                             <div class="col-sm-10">
                                                 <input type="password" name="password" class="form-control"
-                                                    placeholder="Reset the password as Administrator (Left it empty if don't want to reset)" >
+                                                    placeholder="Reset the password as Administrator (Left it empty if don't want to reset)">
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        {{-- <div class="form-group row">
                                             <label for="role" class="col-sm-2 col-form-label">Role</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" name="role" id="role">
@@ -91,8 +91,17 @@
                                                     <option value="User"  {{'User'== $edit->role ? 'selected':''}}>User</option>
                                                 </select>
                                             </div>
+                                        </div> --}}
+                                        <div class="form-group row">
+                                            <label for="status" class="col-sm-2 col-form-label">Status</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control" name="status" id="status">
+                                                    <option value="Active" {{'Admin'== $edit->status ? 'selected':''}}>Active</option>
+                                                    <option value="Blacklist"  {{'Blacklist'== $edit->status ? 'selected':''}}>Blacklist</option>
+                                                </select>
+                                            </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary float-right">Add User</button>
+                                        <button type="submit" class="btn btn-primary float-right">Edit User</button>
                                     </form>
                                 </div>
                             </div>

@@ -104,28 +104,33 @@ class WalletController extends Controller
         }
     }
 
-    public function withdrawalRequest(){
+    public function withdrawalRequest()
+    {
         $withdrawalRequests = WithdrawalRequest::where('status', 'pending')->get();
-        $withdrawalRequestsHistory = WithdrawalRequest::whereIn('status', ['approved','rejected'])->get();
+        $withdrawalRequestsHistory = WithdrawalRequest::whereIn('status', ['approved', 'rejected'])
+            ->get();
 
         return view('wallet.withdrawalRequest', ['withdrawalRequests' => $withdrawalRequests, 'withdrawalRequestsHistory' => $withdrawalRequestsHistory]);
     }
 
-    public function approveWithdrawalRequest($id){
+    public function approveWithdrawalRequest($id)
+    {
         $withdrawalRequest = WithdrawalRequest::find($id);
         $withdrawalRequest->status = 'approved';
         $withdrawalRequest->save();
 
-        return response()->json(['message' => 'Request from '. $withdrawalRequest->user->email .' approved successfully']);
+        return response()->json(['message' => 'Request from ' . $withdrawalRequest->user->email . ' approved successfully']);
     }
 
-    public function rejectWithdrawalRequest($id){
+    public function rejectWithdrawalRequest($id)
+    {
         $withdrawalRequest = WithdrawalRequest::find($id);
         $withdrawalRequest->status = 'rejected';
         $withdrawalRequest->save();
 
         $user = User::find($withdrawalRequest->user_id);
         $user->wallet->deposit($withdrawalRequest->amount);
+        
 
         return response()->json(['message' => 'Request rejected successfully']);
     }

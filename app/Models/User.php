@@ -42,6 +42,7 @@ class User extends Authenticatable implements Wallet, Customer, ProductInterface
         'email',
         'role',
         'password',
+        'status',
     ];
 
     /**

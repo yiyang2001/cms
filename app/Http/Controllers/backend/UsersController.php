@@ -91,13 +91,17 @@ class UsersController extends Controller
         $validatedData = $request->validate([
             'name' => 'required',
             'email' => 'required|unique:users,email,' . $user->id,
-            'password' => 'nullable|min:6',
+            'password' => 'nullable|min:8|max:255',
+            'status' => 'required',
         ]);
 
         try {
+            // if (
+            //     $user->name == $validatedData['name'] && $user->email == $validatedData['email'] && empty($validatedData['password']) &&
+            //     $user->role == $request->input('role')
+            // )
             if (
-                $user->name == $validatedData['name'] && $user->email == $validatedData['email'] && empty($validatedData['password']) &&
-                $user->role == $request->input('role')
+                $user->name == $validatedData['name'] && $user->email == $validatedData['email'] && empty($validatedData['password']) && empty($validatedData['status'])
             ) {
                 return redirect()->back()->with('error', 'No changes made to user ' . $user->name);
             }
@@ -108,7 +112,8 @@ class UsersController extends Controller
 
             $user->name = $validatedData['name'];
             $user->email = $validatedData['email'];
-            $user->role = $request->input('role');
+            $user->status = $validatedData['status'];
+            // $user->role = $request->input('role');
 
             DB::beginTransaction();
             // Update all request except password

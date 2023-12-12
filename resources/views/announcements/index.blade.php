@@ -53,6 +53,7 @@
                                                     {{-- <th>Content</th> --}}
                                                     {{-- <th>Image</th> --}}
                                                     {{-- <th>File</th> --}}
+                                                    <th>Created At</th>
                                                     <th>Action</th>
                                                 </tr>
                                             </thead>
@@ -79,6 +80,7 @@
                                                                 No File
                                                             @endif
                                                         </td> --}}
+                                                        <td>{{ $announcement->created_at }}</td>
                                                         <td>
                                                             <a href="{{ route('announcements.show', $announcement->id) }}"
                                                                 class="btn btn-info btn-sm">View</a>

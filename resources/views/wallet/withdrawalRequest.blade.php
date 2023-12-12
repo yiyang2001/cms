@@ -55,35 +55,36 @@
                                         </thead>
                                         <tbody>
                                             @foreach ($withdrawalRequests as $request)
-                                                <tr>
-                                                    <td>{{ $request->user->email }}</td>
-                                                    <td>{{ $request->amount }}</td>
-                                                    <td>
-                                                        @if ($request->status == 'pending')
-                                                            <span
-                                                                class="badge badge-info">{{ ucfirst($request->status) }}</span>
-                                                        @elseif ($request->status == 'approved')
-                                                            <span
-                                                                class="badge badge-success">{{ ucfirst($request->status) }}</span>
-                                                        @elseif ($request->status == 'rejected')
-                                                            <span
-                                                                class="badge badge-danger">{{ ucfirst($request->status) }}</span>
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $request->created_at }}</td>
-                                                    <td>
-                                                        <button type="button" class="btn-sm btn-success approve-request"
-                                                            data-request-id="{{ $request->id }}">
-                                                            <i class="fas fa-user-check"></i> Approve
-                                                        </button>
-                                                        <button type="button" class="btn-sm btn-danger reject-request"
-                                                            data-request-id="{{ $request->id }}">
-                                                            <i class="far fa-times-circle"></i> Reject
-                                                        </button>
-
-                                                    </td>
-
-                                                </tr>
+                                                @if (isset($request->user->email))
+                                                    <tr>
+                                                        <td>{{ $request->user->email }}</td>
+                                                        <td>{{ $request->amount }}</td>
+                                                        <td>
+                                                            @if ($request->status == 'pending')
+                                                                <span
+                                                                    class="badge badge-info">{{ ucfirst($request->status) }}</span>
+                                                            @elseif ($request->status == 'approved')
+                                                                <span
+                                                                    class="badge badge-success">{{ ucfirst($request->status) }}</span>
+                                                            @elseif ($request->status == 'rejected')
+                                                                <span
+                                                                    class="badge badge-danger">{{ ucfirst($request->status) }}</span>
+                                                            @endif
+                                                        </td>
+                                                        <td>{{ $request->created_at }}</td>
+                                                        <td>
+                                                            <button type="button"
+                                                                class="btn-sm btn-success approve-request"
+                                                                data-request-id="{{ $request->id }}">
+                                                                <i class="fas fa-user-check"></i> Approve
+                                                            </button>
+                                                            <button type="button" class="btn-sm btn-danger reject-request"
+                                                                data-request-id="{{ $request->id }}">
+                                                                <i class="far fa-times-circle"></i> Reject
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                @endif
                                             @endforeach
                                         </tbody>
                                     </table>
@@ -108,23 +109,25 @@
                                     </thead>
                                     <tbody>
                                         @foreach ($withdrawalRequestsHistory as $request)
-                                            <tr>
-                                                <td>{{ $request->user->email }}</td>
-                                                <td>{{ $request->amount }}</td>
-                                                <td>
-                                                    @if ($request->status == 'pending')
-                                                        <span
-                                                            class="badge badge-info">{{ ucfirst($request->status) }}</span>
-                                                    @elseif ($request->status == 'approved')
-                                                        <span
-                                                            class="badge badge-success">{{ ucfirst($request->status) }}</span>
-                                                    @elseif ($request->status == 'rejected')
-                                                        <span
-                                                            class="badge badge-danger">{{ ucfirst($request->status) }}</span>
-                                                    @endif
-                                                </td>
-                                                <td>{{ $request->created_at }}</td>
-                                            </tr>
+                                            @if (isset($request->user->email))
+                                                <tr>
+                                                    <td>{{ $request->user->email }}</td>
+                                                    <td>{{ $request->amount }}</td>
+                                                    <td>
+                                                        @if ($request->status == 'pending')
+                                                            <span
+                                                                class="badge badge-info">{{ ucfirst($request->status) }}</span>
+                                                        @elseif ($request->status == 'approved')
+                                                            <span
+                                                                class="badge badge-success">{{ ucfirst($request->status) }}</span>
+                                                        @elseif ($request->status == 'rejected')
+                                                            <span
+                                                                class="badge badge-danger">{{ ucfirst($request->status) }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>{{ $request->created_at }}</td>
+                                                </tr>
+                                            @endif
                                         @endforeach
                                     </tbody>
                                 </table>
