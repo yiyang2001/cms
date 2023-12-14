@@ -43,6 +43,11 @@ class User extends Authenticatable implements Wallet, Customer, ProductInterface
         'role',
         'password',
         'status',
+        'social_media',
+        'phone_number',
+        'verified_by_admin',
+        'ic_document',
+        'driving_license_document'
     ];
 
     /**

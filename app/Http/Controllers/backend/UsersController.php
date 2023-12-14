@@ -94,6 +94,7 @@ class UsersController extends Controller
             'email' => 'required|unique:users,email,' . $user->id,
             'password' => 'nullable|min:8|max:255',
             'status' => 'required',
+            'verification'  => 'required',
         ]);
 
         try {
@@ -102,7 +103,11 @@ class UsersController extends Controller
             //     $user->role == $request->input('role')
             // )
             if (
-                $user->name == $validatedData['name'] && $user->email == $validatedData['email'] && empty($validatedData['password']) && empty($validatedData['status'])
+                $user->name == $validatedData['name'] &&
+                $user->email == $validatedData['email'] &&
+                empty($validatedData['password']) &&
+                $user->status == $validatedData['status'] &&
+                $user->verified_by_admin == $validatedData['verification']
             ) {
                 return redirect()->back()->with('error', 'No changes made to user ' . $user->name);
             }
@@ -115,6 +120,7 @@ class UsersController extends Controller
             $user->email = $validatedData['email'];
             $user->status = $validatedData['status'];
             // $user->role = $request->input('role');
+            $user->verified_by_admin = $validatedData['verification'];
 
             DB::beginTransaction();
             // Update all request except password
@@ -280,27 +286,59 @@ class UsersController extends Controller
         // Retrieve the authenticated user
         $user = Auth::user();
 
-        // Validate the form input
-        $name = $request->input('name');
-        $email = $request->input('email');
-        $phone_no = $request->input('phone_no');
-        $bio = $request->input('bio');
-        $location = $request->input('location');
-        $education = $request->input('education');
-        $occupation = $request->input('occupation');
+        try {
+            $request->validate([
+                'name' => 'required|max:255',
+                'email' => 'required|email|max:255',
+                'phone_no' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|min:10|max:13',
+                'bio' => 'nullable|max:255',
+                'location' => 'nullable|max:255',
+                'education' => 'nullable|max:255',
+                'occupation' => 'nullable|max:255',
+                'ic_document' => 'nullable|mimes:pdf|max:2048', // PDF file, max 2MB
+                'driving_license_document' => 'nullable|mimes:pdf|max:2048', // PDF file, max 2MB
+            ]);
 
-        // Update the user's name and email
-        $user->name = $name;
-        $user->email = $email;
-        $user->phone_no = $phone_no;
-        $user->bio = $bio;
-        $user->location = $location;
-        $user->education = $education;
-        $user->occupation = $occupation;
-        $user->save();
+            // Validate the form input
+            $name = $request->input('name');
+            $email = $request->input('email');
+            $phone_no = $request->input('phone_no');
+            $bio = $request->input('bio');
+            $location = $request->input('location');
+            $education = $request->input('education');
+            $occupation = $request->input('occupation');
 
-        // Redirect back to the profile page with a success message
-        return redirect()->back()->with('success', 'Personal details updated successfully.');
+            // Update the user's name and email
+            $user->name = $name;
+            $user->email = $email;
+            $user->phone_no = $phone_no;
+            $user->bio = $bio;
+            $user->location = $location;
+            $user->education = $education;
+            $user->occupation = $occupation;
+
+            if ($request->hasFile('ic_document')) {
+                $icOriginalFilename = pathinfo($request->file('ic_document')->getClientOriginalName(), PATHINFO_FILENAME);
+                $ic_document_name = $icOriginalFilename. '_' . now()->format('Ymd_His').'.'.$request->file('ic_document')->getClientOriginalExtension();
+                $ic_document_path = $request->file('ic_document')->storeAs('users/' . $user->id . '/ic', $ic_document_name);
+                $user->ic_document = $ic_document_path;
+            }
+
+            if ($request->hasFile('driving_license_document')) {
+                $originalFilename = pathinfo($request->file('driving_license_document')->getClientOriginalName(), PATHINFO_FILENAME);
+                $driving_license_document_name = $originalFilename. '_' . now()->format('Ymd_His').'.'.$request->file('driving_license_document')->getClientOriginalExtension();
+                $driving_license_document_path = $request->file('driving_license_document')->storeAs('users/' . $user->id . '/driving_license', $driving_license_document_name);
+                $user->driving_license_document = $driving_license_document_path;
+            }
+            $user->save();
+
+            // Redirect back to the profile page with a success message
+            return redirect()->back()->with('success', 'Personal details updated successfully.');
+        } catch (\Exception $e) {
+            // Rollback the transaction if any error occurs
+            DB::rollBack();
+            return redirect()->back()->with('error', 'Failed to update personal details: ' . $e->getMessage());
+        }
     }
 
     public function account()
@@ -320,5 +358,30 @@ class UsersController extends Controller
         $instagramProfileUrl = 'https://www.instagram.com/' . $instagramUsername;
 
         return view('auth.settings.account', compact('user'), ['instagramUsername' => $instagramUsername, 'instagramProfileUrl' => $instagramProfileUrl]);
+    }
+
+    public function usersAwaitingVerification()
+    {
+        $usersAwaitingVerification = User::where('verified_by_admin', false)->get();
+
+        return view('backend.users.awaiting_verification', compact('usersAwaitingVerification'));
+    }
+
+    public function verifyUser($id)
+    {
+        $user = User::find($id);
+        $user->verified_by_admin = true;
+        $user->save();
+
+        return redirect()->back()->with('success', 'User ' . $user->name . ' successfully verified.');
+    }
+
+    public function rejectUser($id)
+    {
+        $user = User::find($id);
+        $user->verified_by_admin = 2;
+        $user->save();
+
+        return redirect()->back()->with('success', 'User ' . $user->name . ' successfully rejected.');
     }
 }

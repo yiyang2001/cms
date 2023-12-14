@@ -8,7 +8,7 @@ use App\Http\Controllers\backend\WalletController;
 use App\Http\Controllers\TripController;
 use App\Models\Announcement;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Route; 
 
 /*
 |--------------------------------------------------------------------------
@@ -40,94 +40,88 @@ Route::get('/testing2', function () {
 Route::get('/googlemap', function () {
     return view('googlemap');
 });
-
-Auth::routes();
-Route::get('/auth/settings/reset-password',  [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForms'])->name('auth.settings.reset-password')->middleware('auth');;
-Route::post('/auth/settings/reset', [App\Http\Controllers\Auth\ResetPasswordController::class, 'resets'])->name('auth.settings.reset')->middleware('auth');;
-Route::get('/auth/settings/account', [App\Http\Controllers\Backend\UsersController::class, 'account'])->name('auth.settings.account')->middleware('auth');;
-
-Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
-
 // Data Tables
 Route::get('/datatables', function () {
     return view('backend.datatables');
 });
-
-Route::get('/navbar', [App\Http\Controllers\backend\NotificationController::class, 'renderNavbar'])->name('navbar.render');
-
-Route::get('/notifications', [App\Http\Controllers\backend\NotificationController::class, 'index'])->name('notifications.index');
-Route::put('/notifications/{id}/mark-as-read', [App\Http\Controllers\backend\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
-Route::delete('/notifications/{id}', [App\Http\Controllers\backend\NotificationController::class, 'delete'])->name('notifications.delete');
-
-// User Management
-Route::get('user/all-users', [App\Http\Controllers\backend\UsersController::class, 'AllUsers'])->name('all-users')->middleware('auth');
-Route::get('user/add-users', [App\Http\Controllers\backend\UsersController::class, 'AddUsers'])->name('add-users')->middleware('auth');
-Route::post('/insert-users', [App\Http\Controllers\backend\UsersController::class, 'InsertUsers'])->name('insert-users')->middleware('auth');
-Route::get('/user/edit-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'EditUsers'])->name('edit-users')->middleware('auth');
-Route::post('/update-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'UpdateUsers'])->name('update-users')->middleware('auth');
-Route::get('/delete-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'DeleteUsers'])->name('delete-users')->middleware('auth');
-Route::get('/my-profile', [App\Http\Controllers\backend\UsersController::class, 'myProfile'])->name('my-profile')->middleware('auth');
-Route::get('/user-profile/{user_id}', [App\Http\Controllers\backend\UsersController::class, 'userProfile'])->name('user-profile')->middleware('auth');
-Route::post('/my-profile/upload/image', [App\Http\Controllers\backend\UsersController::class, 'uploadImage'])->name('upload.image');
-Route::post('/my-profile/updateSocialMedia', [App\Http\Controllers\backend\UsersController::class, 'uploadSocialMedia'])->name('my-profile.updateSocialMedia');
-Route::post('/my-profile/updatePersonalDetails', [App\Http\Controllers\backend\UsersController::class, 'updatePersonalDetails'])->name('my-profile.updatePersonalDetails');
-
-// example
-// Route::resource('photos', PhotoController::class)->except(['index', 'show','create', 'store', 'update', 'destroy']);
-// Route::resource('photos', PhotoController::class)->names(['create' => 'photos.build']); 
-// Route::resource('users', AdminUserController::class)->parameters(['users' => 'admin_user']);
-
-Route::get('/trips/test', function () {
-    return view('trips.test');
-});
-Route::get('/trips/search', [App\Http\Controllers\backend\TripController::class, 'search'])->name('trips.search')->middleware('auth');
-Route::post('/trips/{trip}/join', [App\Http\Controllers\backend\TripController::class, 'joinTrip'])->name('trips.joinTrip')->middleware('auth');
-Route::post('/trips/{trip}/request', [App\Http\Controllers\backend\TripController::class, 'requestTrip'])->name('trips.requestTrip')->middleware('auth');
-Route::post('/trips/searchResults', [App\Http\Controllers\backend\TripController::class, 'searchResults'])->name('trips.searchResults')->middleware('auth');
-Route::get('/trips/myTrips', [App\Http\Controllers\backend\TripController::class, 'myTrips'])->name('trips.myTrips')->middleware('auth');
-Route::get('/trips/{id}/join-requests', [\App\Http\Controllers\backend\TripController::class, 'showPendingJoinRequests'])
-    ->name('trips.pendingJoinRequests')
-    ->middleware('auth')
-    ->where(['id' => '[0-9]+']);
-// ->middleware(['auth', 'driver'])
-Route::put('/trip_requests/{request}', [\App\Http\Controllers\backend\TripController::class, 'updateTripRequest'])->name('trip_requests.update');
-
-Route::resource('trips', App\Http\Controllers\backend\TripController::class)->middleware('auth');
-
-
-// Route::get('/chat', [\App\Http\Controllers\backend\ChatController::class, 'index'])->name('chat.index');
-Route::get('/chat/{user_id}', [\App\Http\Controllers\backend\ChatController::class, 'chat'])->name('chat.chat')->middleware('auth');
-Route::get('/chat/{user_id}/messages_chat', [\App\Http\Controllers\backend\ChatController::class, 'messagesChat'])->name('chat.messages_chat')->middleware('auth');
-Route::get('/chat/{user_id}/userChat', [\App\Http\Controllers\backend\ChatController::class, 'userChat'])->name('chat.userChat')->middleware('auth');
-Route::post('/chat/send', [\App\Http\Controllers\backend\ChatController::class, 'send'])->name('chat.send');
-
-Route::middleware('auth')->group(function () {
-    Route::resource('tripRequest', App\Http\Controllers\backend\TripRequestController::class);
-    Route::post('/vehicles/images/upload', [App\Http\Controllers\backend\VehicleController::class, 'uploadImage'])->name('vehicles.uploadImage');
-    Route::post('/vehicles/images/delete', [App\Http\Controllers\backend\VehicleController::class, 'deleteImage'])->name('vehicles.deleteImage');
-    Route::post('/vehicles/images/update', [App\Http\Controllers\backend\VehicleController::class, 'updateImage'])->name('vehicles.updateImage');
-    Route::get('/vehicles/list', [App\Http\Controllers\backend\VehicleController::class, 'list'])->name('vehicles.list');
-    Route::post('/vehicles/update_vehicle/{id}', [App\Http\Controllers\backend\VehicleController::class, 'update_vehicle'])->name('vehicles.update_vehicle');
-    Route::middleware('auth')->group(function () {
-        Route::resource('vehicles', App\Http\Controllers\backend\VehicleController::class);
-    });
-});
-
-
-
-
-Route::get('image/upload', [App\Http\Controllers\backend\VehicleController::class, 'upload']);
-Route::post('image/upload/store', [App\Http\Controllers\backend\VehicleController::class, 'fileStore'])->name('image.upload.store');
-
-
-//Route for submitting the form data
-Route::post('/storedata', [App\Http\Controllers\backend\VehicleController::class, 'storeData'])->name('form.data');
-//Route for submitting dropzone data
-Route::post('/storeimage', [App\Http\Controllers\backend\VehicleController::class, 'storeImage']);
 Route::post('/stripe/webhook', [StripeController::class, 'handleWebhook']);
+
+Auth::routes();
 
 Route::middleware('auth')->group(
     function () {
+        Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('dashboard');
+
+        Route::get('/my-profile', [App\Http\Controllers\backend\UsersController::class, 'myProfile'])->name('my-profile');
+        Route::post('/my-profile/upload/image', [App\Http\Controllers\backend\UsersController::class, 'uploadImage'])->name('upload.image');
+        Route::post('/my-profile/updateSocialMedia', [App\Http\Controllers\backend\UsersController::class, 'uploadSocialMedia'])->name('my-profile.updateSocialMedia');
+        Route::post('/my-profile/updatePersonalDetails', [App\Http\Controllers\backend\UsersController::class, 'updatePersonalDetails'])->name('my-profile.updatePersonalDetails');
+
+        Route::get('/auth/settings/reset-password',  [App\Http\Controllers\Auth\ResetPasswordController::class, 'showResetForms'])->name('auth.settings.reset-password');;
+        Route::post('/auth/settings/reset', [App\Http\Controllers\Auth\ResetPasswordController::class, 'resets'])->name('auth.settings.reset');;
+        Route::get('/auth/settings/account', [App\Http\Controllers\Backend\UsersController::class, 'account'])->name('auth.settings.account');;
+
+        Route::get('/navbar', [App\Http\Controllers\backend\NotificationController::class, 'renderNavbar'])->name('navbar.render');
+        Route::get('/notifications', [App\Http\Controllers\backend\NotificationController::class, 'index'])->name('notifications.index');
+        Route::put('/notifications/{id}/mark-as-read', [App\Http\Controllers\backend\NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+        Route::delete('/notifications/{id}', [App\Http\Controllers\backend\NotificationController::class, 'delete'])->name('notifications.delete');
+
+    }
+);
+
+Route::middleware(['auth','verifiedByAdmin'])->group(
+    function () {
+
+        // User Management
+        Route::get('users/all-users', [App\Http\Controllers\backend\UsersController::class, 'AllUsers'])->name('all-users');
+        Route::get('users/add-users', [App\Http\Controllers\backend\UsersController::class, 'AddUsers'])->name('add-users');
+        Route::post('/insert-users', [App\Http\Controllers\backend\UsersController::class, 'InsertUsers'])->name('insert-users');
+        Route::get('/users/edit-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'EditUsers'])->name('edit-users');
+        Route::post('/update-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'UpdateUsers'])->name('update-users');
+        Route::get('/delete-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'DeleteUsers'])->name('delete-users');
+        Route::get('/user-profile/{user_id}', [App\Http\Controllers\backend\UsersController::class, 'userProfile'])->name('user-profile');
+        Route::get('/users/awaiting_verification', [App\Http\Controllers\backend\UsersController::class, 'usersAwaitingVerification'])->name('users_awaiting_verification');
+        Route::get('/users/verify/{id}', [App\Http\Controllers\backend\UsersController::class, 'verifyUser'])->name('users.verify');
+        Route::get('/users/reject/{id}', [App\Http\Controllers\backend\UsersController::class, 'rejectUser'])->name('users.reject');
+
+        Route::get('/trips/test', function () {
+            return view('trips.test');
+        });
+        Route::get('/trips/search', [App\Http\Controllers\backend\TripController::class, 'search'])->name('trips.search');
+        Route::post('/trips/{trip}/join', [App\Http\Controllers\backend\TripController::class, 'joinTrip'])->name('trips.joinTrip');
+        Route::post('/trips/{trip}/request', [App\Http\Controllers\backend\TripController::class, 'requestTrip'])->name('trips.requestTrip');
+        Route::post('/trips/searchResults', [App\Http\Controllers\backend\TripController::class, 'searchResults'])->name('trips.searchResults');
+        Route::get('/trips/myTrips', [App\Http\Controllers\backend\TripController::class, 'myTrips'])->name('trips.myTrips');
+        Route::get('/trips/{id}/join-requests', [\App\Http\Controllers\backend\TripController::class, 'showPendingJoinRequests'])
+            ->name('trips.pendingJoinRequests')
+            
+            ->where(['id' => '[0-9]+']);
+        // ->middleware(['auth', 'driver'])
+        Route::put('/trip_requests/{request}', [\App\Http\Controllers\backend\TripController::class, 'updateTripRequest'])->name('trip_requests.update');
+
+        Route::resource('trips', App\Http\Controllers\backend\TripController::class);
+
+        // Route::get('/chat', [\App\Http\Controllers\backend\ChatController::class, 'index'])->name('chat.index');
+        Route::get('/chat/{user_id}', [\App\Http\Controllers\backend\ChatController::class, 'chat'])->name('chat.chat');
+        Route::get('/chat/{user_id}/messages_chat', [\App\Http\Controllers\backend\ChatController::class, 'messagesChat'])->name('chat.messages_chat');
+        Route::get('/chat/{user_id}/userChat', [\App\Http\Controllers\backend\ChatController::class, 'userChat'])->name('chat.userChat');
+        Route::post('/chat/send', [\App\Http\Controllers\backend\ChatController::class, 'send'])->name('chat.send');
+
+        Route::resource('tripRequest', App\Http\Controllers\backend\TripRequestController::class);
+        Route::post('/vehicles/images/upload', [App\Http\Controllers\backend\VehicleController::class, 'uploadImage'])->name('vehicles.uploadImage');
+        Route::post('/vehicles/images/delete', [App\Http\Controllers\backend\VehicleController::class, 'deleteImage'])->name('vehicles.deleteImage');
+        Route::post('/vehicles/images/update', [App\Http\Controllers\backend\VehicleController::class, 'updateImage'])->name('vehicles.updateImage');
+        Route::get('/vehicles/list', [App\Http\Controllers\backend\VehicleController::class, 'list'])->name('vehicles.list');
+        Route::post('/vehicles/update_vehicle/{id}', [App\Http\Controllers\backend\VehicleController::class, 'update_vehicle'])->name('vehicles.update_vehicle');
+        Route::resource('vehicles', App\Http\Controllers\backend\VehicleController::class);
+
+        Route::get('image/upload', [App\Http\Controllers\backend\VehicleController::class, 'upload']);
+        Route::post('image/upload/store', [App\Http\Controllers\backend\VehicleController::class, 'fileStore'])->name('image.upload.store');
+        //Route for submitting the form data
+        Route::post('/storedata', [App\Http\Controllers\backend\VehicleController::class, 'storeData'])->name('form.data');
+        //Route for submitting dropzone data
+        Route::post('/storeimage', [App\Http\Controllers\backend\VehicleController::class, 'storeImage']);
+
         Route::get('/wallet/top-up', [StripeController::class, 'showTopUpForm'])->name('stripe.top-up');
         Route::post('/wallet/top-up', [StripeController::class, 'handleTopUp'])->name('stripe.top-up.submit');
         Route::get('/wallet/top-up/success', [StripeController::class, 'handleTopUpSuccess'])->name('stripe.top-up.success');
@@ -156,7 +150,7 @@ Route::middleware('auth')->group(
 
         Route::post('/user-profile/{userId}/submit-review', [ReviewController::class, 'store'])->name('user.submit_review');
         Route::get('/user/{userId}/rating-info', [ReviewController::class, 'getRatingInfo'])->name('user.rating_info');
-        Route::get('/user/user-ratings', [ReviewController::class,'userRatings'])->name('user-ratings');
-        Route::get('/user/user-reviews', [ReviewController::class,'userReviews'])->name('user-reviews');
+        Route::get('/user/user-ratings', [ReviewController::class, 'userRatings'])->name('user-ratings');
+        Route::get('/user/user-reviews', [ReviewController::class, 'userReviews'])->name('user-reviews');
     }
 );

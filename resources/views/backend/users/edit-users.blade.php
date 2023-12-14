@@ -96,12 +96,32 @@
                                             <label for="status" class="col-sm-2 col-form-label">Status</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" name="status" id="status">
-                                                    <option value="Active" {{'Admin'== $edit->status ? 'selected':''}}>Active</option>
-                                                    <option value="Blacklist"  {{'Blacklist'== $edit->status ? 'selected':''}}>Blacklist</option>
+                                                    <option value="Active" {{ 'Admin' == $edit->status ? 'selected' : '' }}>
+                                                        Active</option>
+                                                    <option value="Blacklist"
+                                                        {{ 'Blacklist' == $edit->status ? 'selected' : '' }}>Blacklist</option>
                                                 </select>
                                             </div>
                                         </div>
-                                        <button type="submit" class="btn btn-primary float-right">Edit User</button>
+                                        <div class="form-group row">
+                                            <label for="status" class="col-sm-2 col-form-label">Verification
+                                                Status</label>
+                                            <div class="col-sm-10">
+                                                <select class="form-control" name="verification" id="verification">
+                                                    <option value="1"
+                                                        {{ '1' == $edit->verified_by_admin ? 'selected' : '' }}>Approved
+                                                    </option>
+                                                    <option value="0"
+                                                        {{ '0' == $edit->verified_by_admin ? 'selected' : '' }}>Awaiting
+                                                        Approval</option>
+                                                    <option value="2"
+                                                        {{ '2' == $edit->verified_by_admin ? 'selected' : '' }}>Rejected
+                                                    </option>
+                                                </select>
+                                            </div>
+                                            <div class="col-12 d-flex justify-content-end">
+                                                <button type="submit" class="btn btn-primary">Edit User</button>
+                                            </div>
                                     </form>
                                 </div>
                             </div>

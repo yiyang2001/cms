@@ -84,15 +84,17 @@
                                                     <td>{{ $user->role }}</td>
                                                     <td>{{ $user->created_at }}</td>
                                                     <td>
-                                                        @if ($user->status == "Active")
+                                                        @if ($user->status == 'Active')
                                                             <span class="badge badge-success">Active</span>
                                                         @else
                                                             <span class="badge badge-danger">Blacklist</span>
                                                         @endif
                                                     </td>
                                                     <td>
+                                                        <a href="{{ route('user-profile', $user->id) }}"
+                                                            class="btn btn-info btn-sm">Profile</a>
                                                         <a href="{{ route('edit-users', $user->id) }}"
-                                                            class="btn btn-primary">Edit</a>
+                                                            class="btn btn-primary btn-sm">Edit</a>
                                                         {{-- <a href="{{ route('delete-users', $user->id) }}"
                                                             class="btn btn-danger">Delete</a> --}}
                                                     </td>

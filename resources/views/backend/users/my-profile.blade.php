@@ -1,5 +1,18 @@
 @extends('backend.layouts.app')
 @section('content')
+    <style>
+        .upload-text {
+            color: blue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        .upload-text:hover {
+            text-decoration: none;
+            color: #0069d9;
+            /* Change the hover color as needed */
+        }
+    </style>
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
@@ -22,6 +35,29 @@
                 <div class="container">
                     <div class="card">
                         <div class="card-body">
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @elseif (session('error'))
+                                <div class="alert alert-danger">
+                                    <strong>{{ session('error') }}</strong>
+                                </div>
+                            @elseif (session('warning'))
+                                <div class="alert alert-warning">
+                                    {{ session('warning') }}
+                                </div>
+                            @endif
+                            @if (!session('warning') && !session('error'))
+                                @if (!$user->ic_document || !$user->driving_license_document)
+                                    <div class="alert alert-warning">
+                                        <strong>Warning!</strong> Please <span class="upload-text" id="upload-trigger">
+                                            Upload
+                                        </span> your IC and driving license documents for verification. We appreciate your
+                                        patience during this process.
+                                    </div>
+                                @endif
+                            @endif
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="card mb-4">
@@ -144,6 +180,29 @@
                                                 </div>
                                                 <div class="col-sm-9">
                                                     <p class="text-muted mb-0">{{ $user->occupation }}</p>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">IC Document</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <p class="text-muted mb-0"> <a
+                                                            href="{{ asset('storage/' . $user->ic_document) }}"
+                                                            target="_blank">{{ basename($user->ic_document) }}</a></p>
+                                                </div>
+                                            </div>
+                                            <hr>
+                                            <div class="row">
+                                                <div class="col-sm-3">
+                                                    <p class="mb-0">Driving License Document</p>
+                                                </div>
+                                                <div class="col-sm-9">
+                                                    <p class="text-muted mb-0"> <a
+                                                            href="{{ asset('storage/' . $user->driving_license_document) }}"
+                                                            target="_blank">{{ basename($user->driving_license_document) }}</a>
+                                                    </p>
                                                 </div>
                                             </div>
                                             <hr>
@@ -327,7 +386,8 @@
                 </div>
                 <div class="modal-body">
                     <!-- Add your form fields here for editing the details -->
-                    <form action="{{ route('my-profile.updatePersonalDetails') }}" method="POST">
+                    <form action="{{ route('my-profile.updatePersonalDetails') }}" method="POST"
+                        enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="fullName" class="form-label">Full Name</label>
@@ -364,7 +424,37 @@
                                 value="{{ $user->occupation }}">
                         </div>
                         <!-- Add more fields if needed -->
+                        <div class="form-group">
+                            @if ($user->ic_document)
+                                <p>Existing IC Document: <a href="{{ asset('storage/' . $user->ic_document) }}"
+                                        target="_blank">{{ basename($user->ic_document) }}</a></p>
+                                <div>
+                                    <label for="ic_document">Replace IC (PDF)</label>
+                                    <input type="file" class="form-control" id="ic_document" name="ic_document"
+                                        accept=".pdf">
+                                </div>
+                            @else
+                                <label for="ic">Upload IC (PDF)</label>
+                                <input type="file" class="form-control" id="ic_document" name="ic_document">
+                            @endif
+                        </div>
 
+                        <div class="form-group">
+                            @if ($user->driving_license_document)
+                                <p>Existing Driving License Document: <a
+                                        href="{{ asset('storage/' . $user->driving_license_document) }}"
+                                        target="_blank">{{ basename($user->driving_license_document) }}</a></p>
+                                <div>
+                                    <label for="driving_license">Replace Driving License (PDF)</label>
+                                    <input type="file" class="form-control" id="driving_license_document"
+                                        name="driving_license_document" accept=".pdf">
+                                </div>
+                            @else
+                                <label for="driving_license">Upload Driving License (PDF)</label>
+                                <input type="file" class="form-control" id="driving_license_document"
+                                    name="driving_license_document" accept=".pdf">
+                            @endif
+                        </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                             <button type="submit" class="btn btn-primary">Save Changes</button>
@@ -378,6 +468,18 @@
 @endsection
 
 <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('upload-trigger').addEventListener('click', function() {
+            $('#editModal').modal('show'); // Show the modal
+
+            // Focus on the ic_document field inside the modal after a short delay
+            setTimeout(function() {
+                document.getElementById('ic_document').focus();
+            }, 500);
+        });
+    });
+
+
     function previewImage(event) {
         var input = event.target;
         if (input.files && input.files[0]) {
