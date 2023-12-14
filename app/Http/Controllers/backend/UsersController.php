@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\backend;
 
 use App\Http\Controllers\Controller;
+use App\Models\Review;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -189,8 +190,42 @@ class UsersController extends Controller
         $socialMedia = $user->social_media;
         $instagramUsername = $socialMedia['instagram'];
         $instagramProfileUrl = 'https://www.instagram.com/' . $instagramUsername;
+        // $reviews = $user->reviews()->orderBy('created_at', 'desc')->get();
+        // $reviews = $user->reviews()->with('reviewedUser')->get();
+        $reviews = Review::where('reviewed_user_id', $userId)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
+        $review = Review::where('reviewed_user_id', $userId)->get();
+        $totalReviews = count($review);
 
-        return view('backend.users.user-profile', compact('user'), ['instagramUsername' => $instagramUsername, 'instagramProfileUrl' => $instagramProfileUrl]);
+        $averageRating = number_format(round($review->avg('rating'), 1), 1);
+        // Calculate the rating breakdown
+        $ratingBreakdown = [];
+        foreach ($review as $review) {
+            $rating = $review->rating;
+            if (!isset($ratingBreakdown[$rating])) {
+                $ratingBreakdown[$rating] = 1;
+            } else {
+                $ratingBreakdown[$rating]++;
+            }
+        }
+
+        $percentages = [];
+        for ($i = 5; $i >= 1; $i--) {
+            $ratingCount = $ratingBreakdown[$i] ?? 0;
+            $percentages[$i] = $totalReviews > 0 ? round(($ratingCount / $totalReviews) * 100) : 0;
+        }
+
+
+        return view('backend.users.user-profile', compact('user'), [
+            'instagramUsername' => $instagramUsername,
+            'instagramProfileUrl' => $instagramProfileUrl,
+            'reviews' => $reviews,
+            'averageRating' => $averageRating,
+            'ratingBreakdown' => $ratingBreakdown,
+            'totalReviews' => $totalReviews,
+            'percentages' => $percentages,
+        ]);
     }
 
     public function uploadImage(Request $request)

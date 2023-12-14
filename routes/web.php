@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\backend\AnnouncementController;
 use App\Http\Controllers\backend\ChatController;
+use App\Http\Controllers\backend\ReviewController;
 use App\Http\Controllers\backend\StripeController;
 use App\Http\Controllers\backend\WalletController;
 use App\Http\Controllers\TripController;
@@ -59,10 +60,10 @@ Route::put('/notifications/{id}/mark-as-read', [App\Http\Controllers\backend\Not
 Route::delete('/notifications/{id}', [App\Http\Controllers\backend\NotificationController::class, 'delete'])->name('notifications.delete');
 
 // User Management
-Route::get('/all-users', [App\Http\Controllers\backend\UsersController::class, 'AllUsers'])->name('all-users')->middleware('auth');
-Route::get('/add-users', [App\Http\Controllers\backend\UsersController::class, 'AddUsers'])->name('add-users')->middleware('auth');
+Route::get('user/all-users', [App\Http\Controllers\backend\UsersController::class, 'AllUsers'])->name('all-users')->middleware('auth');
+Route::get('user/add-users', [App\Http\Controllers\backend\UsersController::class, 'AddUsers'])->name('add-users')->middleware('auth');
 Route::post('/insert-users', [App\Http\Controllers\backend\UsersController::class, 'InsertUsers'])->name('insert-users')->middleware('auth');
-Route::get('/edit-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'EditUsers'])->name('edit-users')->middleware('auth');
+Route::get('/user/edit-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'EditUsers'])->name('edit-users')->middleware('auth');
 Route::post('/update-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'UpdateUsers'])->name('update-users')->middleware('auth');
 Route::get('/delete-users/{id}', [App\Http\Controllers\backend\UsersController::class, 'DeleteUsers'])->name('delete-users')->middleware('auth');
 Route::get('/my-profile', [App\Http\Controllers\backend\UsersController::class, 'myProfile'])->name('my-profile')->middleware('auth');
@@ -152,5 +153,10 @@ Route::middleware('auth')->group(
 
         Route::get('/contacts', [ChatController::class, 'contacts'])->name('contacts');
         Route::get('/contacts/search', [ChatController::class, 'search'])->name('contacts.search');
+
+        Route::post('/user-profile/{userId}/submit-review', [ReviewController::class, 'store'])->name('user.submit_review');
+        Route::get('/user/{userId}/rating-info', [ReviewController::class, 'getRatingInfo'])->name('user.rating_info');
+        Route::get('/user/user-ratings', [ReviewController::class,'userRatings'])->name('user-ratings');
+        Route::get('/user/user-reviews', [ReviewController::class,'userReviews'])->name('user-reviews');
     }
 );

@@ -57,16 +57,45 @@
                 </li>
                 @if (isset(auth()->user()->role))
                     @if (auth()->user()->role == 'Admin')
-                        <li class="nav-item">
-                            <a href="{{ route('all-users') }}"
-                                class="nav-link {{ request()->is('all-users', 'add-users') ? 'active' : '' }}">
+                        <li class="nav-item {{ request()->is('user/*') ? 'menu-open active' : '' }}">
+                            <a href="#" class="nav-link {{ request()->is('user/*') ? 'active' : '' }}">
                                 <i class="nav-icon fas fa-users"></i>
                                 <p>
                                     User Management
-                                    {{-- <i class="fas fa-angle-left right"></i> --}}
-                                    {{-- <span class="badge badge-info right">6</span> --}}
+                                    <i class="fas fa-angle-left right"></i>
                                 </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{ route('all-users') }}"
+                                        class="nav-link {{ request()->is('user/all-users') ? 'active' : '' }}">
+                                        <i class="fas fa-users nav-icon"></i>
+                                        <p>All Users</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('add-users') }}"
+                                        class="nav-link {{ request()->is('user/add-users') ? 'active' : '' }}">
+                                        <i class="fas fa-user-plus nav-icon"></i>
+                                        <p>Add New User</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user-reviews') }}"
+                                        class="nav-link {{ request()->is('user/user-reviews') ? 'active' : '' }}">
+                                        <i class="fas fa-comments nav-icon"></i>
+                                        <p>User Reviews</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{ route('user-ratings') }}"
+                                        class="nav-link {{ request()->is('user/user-ratings') ? 'active' : '' }}">
+                                        <i class="fas fa-star nav-icon"></i>
+                                        <p>User Ratings</p>
+                                    </a>
+                                </li>
+                            </ul>
+
                         </li>
                     @endif
                 @endif

@@ -96,4 +96,19 @@ class User extends Authenticatable implements Wallet, Customer, ProductInterface
             set: fn ($value) => json_encode($value),
         );
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'reviewed_user_id');
+    }
+
+    public function reviewer()
+    {
+        return $this->hasMany(Review::class, 'user_id');
+    }
+
+    public function getAverageRatingAttribute()
+    {
+        return $this->reviews()->avg('rating');
+    }
 }
