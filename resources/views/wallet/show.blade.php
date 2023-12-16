@@ -80,6 +80,7 @@
                                             <th>Type</th>
                                             <th>Description</th>
                                             <th>Amount</th>
+                                            {{-- <th>Action</th> --}}
                                             <!-- Add more columns if needed -->
                                         </tr>
                                     </thead>
@@ -117,6 +118,10 @@
                                                         {{ number_format($transaction->amount, 2) }}</td>
                                                 @endif
                                                 <!-- Add more columns and transaction data as needed -->
+                                                {{-- <td>
+                                                    <a href="{{ route('reports.payment', $transaction->id) }}"
+                                                        class="btn btn-primary btn-sm">View</a>
+                                                </td> --}}
                                             </tr>
                                         @empty
                                             <tr>

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\backend\AnnouncementController;
 use App\Http\Controllers\backend\ChatController;
+use App\Http\Controllers\backend\ReportController;
 use App\Http\Controllers\backend\ReviewController;
 use App\Http\Controllers\backend\StripeController;
 use App\Http\Controllers\backend\WalletController;
@@ -152,5 +153,7 @@ Route::middleware(['auth','verifiedByAdmin'])->group(
         Route::get('/user/{userId}/rating-info', [ReviewController::class, 'getRatingInfo'])->name('user.rating_info');
         Route::get('/user/user-ratings', [ReviewController::class, 'userRatings'])->name('user-ratings');
         Route::get('/user/user-reviews', [ReviewController::class, 'userReviews'])->name('user-reviews');
+
+        Route::get('/reports/payment/{id}', [ReportController::class, 'paymentReport'])->name('reports.payment');
     }
 );

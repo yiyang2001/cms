@@ -4,7 +4,7 @@
     <div class="content-wrapper">
         <div class="container py-5">
             <div class="row justify-content-center">
-                <div class="col-md-6">
+                <div class="col-md-5">
                     <div class="card shadow-lg">
                         <div class="card-header bg-primary text-white text-center">
                             <h3 class="card-title mb-0">Transfer Funds</h3>
@@ -67,7 +67,7 @@
                     </div>
                 </div>
                 <!-- Transfer History Section -->
-                <div class="col-md-6">
+                <div class="col-md-7">
                     <div class="card shadow-lg">
                         <div class="card-header bg-info text-white text-center">
                             <h3 class="card-title mb-0">Transfer History</h3>
@@ -80,6 +80,7 @@
                                         <th>Amount</th>
                                         <th>Status</th>
                                         <th>Date</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -91,6 +92,10 @@
                                                 <span class="badge badge-success">{{ ucfirst($transfer->transfer_status) }}</span>
                                             </td>
                                             <td>{{ $transfer->transfer_created_at }}</td>
+                                            <td>
+                                                <a href="{{ route('reports.payment', $transfer->transfer_id) }}"
+                                                    class="btn btn-primary btn-sm">View</a>
+                                            </td>
                                         </tr>
                                     @endforeach
                                 </tbody>

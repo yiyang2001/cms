@@ -64,7 +64,9 @@ class WalletController extends Controller
         $user = auth()->user();
         $wallet = $user->wallet;
 
-        $transferHistory = Transfer::select('transfers.*', 'transactions.*', 'users.*','transfers.status as transfer_status','transfers.created_at as transfer_created_at')
+        $transferHistory = Transfer::select('transfers.*', 'transactions.*', 'users.*',
+        'transfers.id as transfer_id', 'transactions.id as transaction_id',
+        'transfers.status as transfer_status','transfers.created_at as transfer_created_at')
             ->where('from_id', $wallet->id)
             ->join('transactions', 'transactions.id', '=', 'transfers.deposit_id')
             ->join('users', 'users.id', '=', 'transactions.payable_id')
