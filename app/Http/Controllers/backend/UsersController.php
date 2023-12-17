@@ -319,6 +319,10 @@ class UsersController extends Controller
                 $driving_license_document_path = $request->file('driving_license_document')->storeAs('users/' . $user->id . '/driving_license', $driving_license_document_name);
                 $user->driving_license_document = $driving_license_document_path;
             }
+
+            if($request->hasFile('ic_document') && $request->hasFile('driving_license_document')){
+                $user->verified_by_admin = 0;
+            }
             $user->save();
 
             // Redirect back to the profile page with a success message

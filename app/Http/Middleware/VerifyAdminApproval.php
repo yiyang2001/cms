@@ -22,7 +22,7 @@ class VerifyAdminApproval
             return redirect()->route('my-profile')->with('warning', 'Your account is awaiting admin approval for verification. We appreciate your patience during this process.');
         }
         else if (auth()->check() && auth()->user()->verified_by_admin == 2) {
-            return redirect()->route('my-profile')->with('error', 'Your account has been rejected by admin. Please contact admin for more information.');
+            return redirect()->route('my-profile')->with('error', 'Your account has been rejected by admin. Please re-upload and resubmit again');
         }
         return $next($request);
     }
