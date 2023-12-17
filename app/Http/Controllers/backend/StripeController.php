@@ -172,8 +172,6 @@ class StripeController extends Controller
             ]
         ]);
 
-        dd($transaction->meta['type']);
-
         return back()->with('success', 'Withdrawal request submitted successfully.');
     }
 

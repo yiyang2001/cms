@@ -42,10 +42,13 @@
                     <div class="row">
                         <div class="col-12">
                             <!-- /.card -->
-
+                            <div class="callout callout-info">
+                                <h5><i class="fas fa-info"></i> Note:</h5>
+                                This page is use for admin to view all the user ratings and status to decide whether to blacklist the user or not.
+                            </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">All User</h3>
+                                    <h3 class="card-title">User Rating</h3>
                                     <div class="card-tools">
                                         <a href="{{ route('add-users') }}" class="btn btn-primary">Add New User</a>
                                     </div>
@@ -84,11 +87,11 @@
                                                         @if ($user->average_rating >= 4.0)
                                                             <span class="badge badge-success"> Excellent </span>
                                                         @elseif($user->average_rating >= 3.5)
-                                                            <span class="badge badge-success"> Good </span>    
+                                                            <span class="badge badge-success"> Good </span>
                                                         @elseif($user->average_rating >= 3.0)
-                                                            <span class="badge badge-success"> Fair </span>    
+                                                            <span class="badge badge-success"> Fair </span>
                                                         @elseif($user->average_rating >= 2.5)
-                                                            <span class="badge badge-warning"> Poor </span>    
+                                                            <span class="badge badge-warning"> Poor </span>
                                                         @else
                                                             <span class="badge badge-danger"> Very Poor </span>
                                                         @endif

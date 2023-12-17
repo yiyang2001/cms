@@ -42,10 +42,13 @@
                     <div class="row">
                         <div class="col-12">
                             <!-- /.card -->
-
+                            <div class="callout callout-info">
+                                <h5><i class="fas fa-info"></i> Note:</h5>
+                                This page is used for admin to view the review of the user.
+                            </div>
                             <div class="card">
                                 <div class="card-header">
-                                    <h3 class="card-title">All User</h3>
+                                    <h3 class="card-title">User Reviews</h3>
                                     <div class="card-tools">
                                         <a href="{{ route('add-users') }}" class="btn btn-primary">Add New User</a>
                                     </div>

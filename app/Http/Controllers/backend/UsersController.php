@@ -33,21 +33,20 @@ class UsersController extends Controller
 
     public function InsertUsers(Request $request)
     {
-        // Validate the form data
-        $validatedData = $request->validate([
-            'name' => 'required|unique:users|max:255',
-            'email' => 'required|email|unique:users|max:255',
-            'password' => 'required|min:8|max:255',
-            'role' => 'required',
-        ]);
-
         try {
+            // Validate the form data
+            $validatedData = $request->validate([
+                'name' => 'required|unique:users|max:255',
+                'email' => 'required|email|unique:users|max:255',
+                'password' => 'required|min:8|max:255',
+            ]);
+
             // Use the model to create a new user instance
             $user = new User();
             $user->name = $validatedData['name'];
             $user->email = $validatedData['email'];
             $user->password = Hash::make($validatedData['password']);
-            $user->role = $validatedData['role'];
+            $user->role = $request->input('role') ? $request->input('role') : 'Customer';
 
             // Save the user to the database
             DB::beginTransaction();
@@ -56,16 +55,6 @@ class UsersController extends Controller
 
             // Redirect back to the same page
             return redirect()->back()->with('success', 'User added successfully.');
-
-            // Redirect to user list page 
-            // return redirect()->route('all-users')->with('success', 'User added successfully.');
-            // return redirect(URL::to('/add-users'))->with('success', 'User added successfully.');
-
-            // Return Json Message
-            // return response()->json([
-            //     'message' => 'Data retrieved successfully',
-            //     'data' => 'Success'
-            // ]);
         } catch (\Exception $e) {
             // Rollback the transaction if any error occurs
             DB::rollBack();
@@ -319,14 +308,14 @@ class UsersController extends Controller
 
             if ($request->hasFile('ic_document')) {
                 $icOriginalFilename = pathinfo($request->file('ic_document')->getClientOriginalName(), PATHINFO_FILENAME);
-                $ic_document_name = $icOriginalFilename. '_' . now()->format('Ymd_His').'.'.$request->file('ic_document')->getClientOriginalExtension();
+                $ic_document_name = $icOriginalFilename . '_' . now()->format('Ymd_His') . '.' . $request->file('ic_document')->getClientOriginalExtension();
                 $ic_document_path = $request->file('ic_document')->storeAs('users/' . $user->id . '/ic', $ic_document_name);
                 $user->ic_document = $ic_document_path;
             }
 
             if ($request->hasFile('driving_license_document')) {
                 $originalFilename = pathinfo($request->file('driving_license_document')->getClientOriginalName(), PATHINFO_FILENAME);
-                $driving_license_document_name = $originalFilename. '_' . now()->format('Ymd_His').'.'.$request->file('driving_license_document')->getClientOriginalExtension();
+                $driving_license_document_name = $originalFilename . '_' . now()->format('Ymd_His') . '.' . $request->file('driving_license_document')->getClientOriginalExtension();
                 $driving_license_document_path = $request->file('driving_license_document')->storeAs('users/' . $user->id . '/driving_license', $driving_license_document_name);
                 $user->driving_license_document = $driving_license_document_path;
             }

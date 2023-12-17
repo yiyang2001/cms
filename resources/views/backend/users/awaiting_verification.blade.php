@@ -20,9 +20,12 @@
         </div>
         <section class="content">
             <div class="container-fluid">
-
                 <div class="row">
                     <div class="col-md-12">
+                        <div class="callout callout-info">
+                            <h5><i class="fas fa-info"></i> Note:</h5>
+                            This page is use for admin to view all the user awaiting approval list.
+                        </div>
                         <div class="card card-primary">
                             <div class="card-header info">
                                 <h3 class="card-title">User Awaiting Approval List</h3>

@@ -151,8 +151,8 @@ Route::middleware(['auth','verifiedByAdmin'])->group(
 
         Route::post('/user-profile/{userId}/submit-review', [ReviewController::class, 'store'])->name('user.submit_review');
         Route::get('/user/{userId}/rating-info', [ReviewController::class, 'getRatingInfo'])->name('user.rating_info');
-        Route::get('/user/user-ratings', [ReviewController::class, 'userRatings'])->name('user-ratings');
-        Route::get('/user/user-reviews', [ReviewController::class, 'userReviews'])->name('user-reviews');
+        Route::get('/users/user-ratings', [ReviewController::class, 'userRatings'])->name('user-ratings');
+        Route::get('/users/user-reviews', [ReviewController::class, 'userReviews'])->name('user-reviews');
 
         Route::get('/reports/payment/{id}', [ReportController::class, 'paymentReport'])->name('reports.payment');
     }

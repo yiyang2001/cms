@@ -76,7 +76,7 @@
                                                     placeholder="Enter password" required>
                                             </div>
                                         </div>
-                                        <div class="form-group row">
+                                        {{-- <div class="form-group row">
                                             <label for="role" class="col-sm-2 col-form-label">Role</label>
                                             <div class="col-sm-10">
                                                 <select class="form-control" name="role" id="role"
@@ -87,7 +87,7 @@
                                                     <option value="user">Customer</option>
                                                 </select>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <button type="submit" class="btn btn-primary float-right">Add User</button>
                                     </form>
                                 </div>
