@@ -56,6 +56,19 @@
                                         </span> your IC and driving license documents for verification. We appreciate your
                                         patience during this process.
                                     </div>
+                                @elseif($user->verified_by_admin == 0)
+                                    <div class="alert alert-warning">
+                                        <strong>Warning!</strong> Your documents are being verified by the admin. We appreciate
+                                        your patience during this process.
+                                    </div>
+                                @elseif($user->verified_by_admin == 2)
+                                    <div class="alert alert-danger">
+                                        <strong>Warning!</strong> Your documents have been rejected by the admin. Please
+                                        <span class="upload-text" id="upload-trigger">
+                                            Upload
+                                        </span> your IC and driving license documents again for verification. We appreciate
+                                        your patience during this process.
+                                    </div>
                                 @endif
                             @endif
                             <div class="row">
